@@ -2,7 +2,7 @@ def agregar_herramientas(herramientas):
     id_h= input("Ingrese el ID de la herramienta: ").strip().upper()
     if id_h in herramientas:
         print("La Herramienta ya existe.....")
-        input("presione cualquier tecla para continuar.......")
+        input("Presione cualquier tecla para continuar -->")
         return herramientas
     nombre= input("Nombre de la Herramienta: ").strip().capitalize()
     categoria= input("Categoria de la Herramienta: ").strip().capitalize()
@@ -12,7 +12,7 @@ def agregar_herramientas(herramientas):
     herramientas[id_h] = {
         "nombre":nombre,
         "categoria":categoria,
-        "cantidad": stock,
+        "stock": stock,
         "estado": estado,
         "valor": valor
     }
@@ -22,13 +22,13 @@ def agregar_herramientas(herramientas):
 def mostrar_herramientas_todas(herramientas):
     if not herramientas:
         print("No hay herramientas")
-        return
-    print(f"{'ID Herramienta':<10}{'Nombre':<30}{'Categoria':<20}{'Cantidad':<10}{'Estado':<10}")
+        return herramientas
+    print(f"{'ID Herramienta':<10}{'Nombre':<30}{'Categoria':<20}{'Stock':<10}{'Estado':<10}")
     print("="*90)
 
     for id , info in herramientas.items():
-        print(f"{id:<10}{info['nombre']:<30}{info['categoria']:<20}{info['cantidad']:<10}{info['estado']:<10}")
-    input("\n\nPresione cualquier tecla para continuar.........")
+        print(f"{id:<10}{info['nombre']:<30}{info['categoria']:<20}{info['stock']:<10}{info['estado']:<10}")
+    input("Presione cualquier tecla para continuar -->")
 
 def buscar_herramienta(herramientas):
     while True:
@@ -55,18 +55,53 @@ def actualizar_herramienta(herramientas):
         print("\nEsta Herramienta no existe :(\n")
         input("Presione cualquier tecla para continuar -->")
         return herramientas
-    else :
-        nombre= input("Nombre de la Herramienta: ").strip().capitalize()
-        categoria= input("Categoria de la Herramienta: ").strip().capitalize()
-        stock= int(input("Cantida de la Herramienta: "))
-        estado = input("Estado de la Herramienta: ").strip().capitalize()
-        valor= float(input("Valor estimado de la Herramienta: "))
-        herramientas[id_h] = {
-            "nombre":nombre,
-            "categoria":categoria,
-            "cantidad": stock,
-            "estado": estado,
-            "valor": valor
-        }
-        print("¡Herramienta Actulizada!")
+    nombre= input("Nombre de la Herramienta: ").strip().capitalize()
+    categoria= input("Categoria de la Herramienta: ").strip().capitalize()
+    stock= int(input("Cantida de la Herramienta: "))
+    estado = input("Estado de la Herramienta: ").strip().capitalize()
+    valor= float(input("Valor estimado de la Herramienta: "))
+    herramientas[id_h] = {
+        "nombre":nombre,
+        "categoria":categoria,
+        "stock": stock,
+        "estado": estado,
+        "valor": valor
+    }
+    print("¡Herramienta Actulizada!")
+    return herramientas
+
+def inavilitar_herramienta(herramientas):
+    id_h= input ("Ingrese el ID de la Herramienta: ").strip().upper()
+    if id_h not in herramientas:
+        print("La Herramienta no existe....")
+        input("Presione cualquier tecla para continuar -->")
+        return herramientas
+    print(f"Vas inavilitar: {herramientas[id_h]['nombre']}")
+    confirmar = input("¿Estas seguro de INAVILITAR la herramienta? (Si/No)").strip().capitalize()
+
+    if confirmar == "Si":
+        herramientas[id_h]['estado'] = "Fuera de servicio"
+        herramientas[id_h]['stock'] = 0
+        print("Se inavilito la herramienta con exito :) ")
+        return herramientas
+    else:
+        print("Accion cancelada.Vuelva pronto")
+        input("-->")
+        return herramientas
+
+def eliminar_herramienta(herramientas):
+    id_h= input ("Ingrese el ID de la Herramienta: ").strip().upper()
+    if id_h not in herramientas:
+        print("La Herramienta no existe....")
+        input("Presione cualquier tecla para continuar -->")
+        return herramientas
+    print(f"!Vas a Eliminar¡: {herramientas[id_h]['nombre']}")
+    confirmar = input("¿Estas seguro de ELIMINAR la herramienta? (Si/No)").strip().capitalize()
+
+    if confirmar == "Si":
+        del herramientas[id_h]
+        return herramientas
+    else:
+        print("Accion cancelada.Vuelva pronto")
+        input("-->")
         return herramientas
