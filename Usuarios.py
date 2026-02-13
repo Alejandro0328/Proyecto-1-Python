@@ -39,7 +39,7 @@ def mostrar_usuarios(usuarios):
     print("="*90)
 
     for id , info in usuarios.items():
-        print(f"{id:<10}{info['nombre'],info['apellidos']:<30}{info['telefono']:<20}{info['direccion']:<10}{info['tipo']:<10}")
+        print(f"{id:<10}{info['nombre']+" "+info['apellido']:<30}{info['telefono']:<20}{info['direccion']:<10}{info['tipo']:<10}")
     input("Presione cualquier tecla para continuar -->")
 
 def buscar_usuario(Usuarios):
@@ -57,7 +57,7 @@ def buscar_usuario(Usuarios):
         if not encontrado:
             print("No hay concidencias encontradas. Intente de nuevo...")
             input("Presione cualquier tecla para continuar -->")
-        continuar = input("\nDeseas seguir buscando (Si\No)").strip().capitalize()
+        continuar = input("Deseas seguir buscando (Si/No)").strip().capitalize()
         if continuar != "Si":
             break
 
@@ -105,6 +105,7 @@ def eliminar_usuario(usuarios):
 
     if confirmar == "Si":
         del usuarios[id_U]
+        print("Usuario eliminado :( ")
         return usuarios
     else:
         print("Accion cancelada.Vuelva pronto")

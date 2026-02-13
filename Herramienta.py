@@ -7,7 +7,12 @@ def agregar_herramientas(herramientas):
     nombre= input("Nombre de la Herramienta: ").strip().capitalize()
     categoria= input("Categoria de la Herramienta: ").strip().capitalize()
     stock= int(input("Cantida de la Herramienta: "))
-    estado = input("Estado de la Herramienta: ").strip().capitalize()
+    while True:
+        estado = input("Estado (Activo/Inactivo/Taller): ").strip().capitalize()
+        if estado == "Activo" or estado == "Inactivo" or estado == "Taller":
+            break
+        print("ERROR: Estado no vaalido por favor ingrese (Activo/Inactivo/Taller) ")
+        input("-->")
     valor= float(input("Valor estimado de la Herramienta: "))
     herramientas[id_h] = {
         "nombre":nombre,
@@ -23,7 +28,7 @@ def mostrar_herramientas_todas(herramientas):
     if not herramientas:
         print("No hay herramientas")
         return herramientas
-    print(f"{'ID Herramienta':<10}{'Nombre':<30}{'Categoria':<20}{'Stock':<10}{'Estado':<10}")
+    print(f"{'ID':<10}{'Nombre':<30}{'Categoria':<20}{'Stock':<10}{'Estado':<10}")
     print("="*90)
 
     for id , info in herramientas.items():
@@ -37,15 +42,15 @@ def buscar_herramienta(herramientas):
         encontrado= False
         for id , info in herramientas.items():
             if herramienta_bus in info['nombre']:
-                print(f"Encontrado {info['nombre']} ID --> {id}")
+                print(f"Encontrado Nombre: {info['nombre']} ID --> {id}")
                 encontrado=True
             elif herramienta_bus in info['categoria']:
-                print(f"Encontrado {info['categoria']}  Nombre: {info['nombre']} ID --> {id}")
+                print(f"Encontrado Categoria: {info['categoria']}  Nombre: {info['nombre']} ID --> {id}")
                 encontrado=True
         if not encontrado:
             print("No hay concidencias encontradas. Intente de nuevo...")
             input("Presione cualquier tecla para continuar -->")
-        continuar = input("\nDeseas seguir buscando (Si\No)").strip().capitalize()
+        continuar = input("\nDeseas seguir buscando (Si/No)").strip().capitalize()
         if continuar != "Si":
             break
 
