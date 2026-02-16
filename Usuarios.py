@@ -1,113 +1,154 @@
 def agregar_Usuario(usuario):
-    id_U= input("Ingrese el ID Usuario: ").strip().upper()
+    print("\n" + "═"*40)
+    print(" 👤 REGISTRAR NUEVO USUARIO ".center(40))
+    print("═"*40)
+    
+    id_U = input("➤ Ingrese el ID Usuario: ").strip().upper()
     if id_U in usuario:
-        print("El Usuario ya existe.....")
-        input("Presione cualquier tecla para continuar -->")
+        print("\n❌ El Usuario ya existe.....")
+        input("Presione Enter para continuar -->")
         return usuario
-    nombre= input("Nombre del Usuario: ").strip().capitalize()
-    apellidos= input("Apellidos del Usuario: ").strip().capitalize()
-    while True:
-        telefono= input("Número de telefono del Usuario: ").strip()
-        if  telefono.isdigit() and len(telefono) == 10:
-            break
-        print ("El número debe ser de 10 Números.")
-        input("Presione cualquier tecla para volver intentar ->")
         
-    direccion= input("Direccion del usuario: ").strip().capitalize() 
+    nombre = input("➤ Nombre del Usuario: ").strip().capitalize()
+    apellidos = input("➤ Apellidos del Usuario: ").strip().capitalize()
+    
     while True:
-        tipo= input("Tipo de usuario(Administrador/Residente)").strip().capitalize()
-        if tipo =="Administrador" or tipo== "Residente":
+        telefono = input("➤ Número de teléfono (10 dígitos): ").strip()
+        if telefono.isdigit() and len(telefono) == 10:
             break
-        print("ERROR: Tipo no válido. Por favor ingrese (Administrador/Residente)")
+        print("❌ ERROR: El número debe ser de 10 dígitos numéricos.")
+        input("Presione Enter para volver intentar ->")
+        
+    direccion = input("➤ Dirección del usuario: ").strip().capitalize() 
+    
+    while True:
+        tipo = input("➤ Tipo (Administrador/Residente): ").strip().capitalize()
+        if tipo == "Administrador" or tipo == "Residente":
+            break
+        print("❌ ERROR: Tipo no válido. Ingrese (Administrador/Residente)")
         input("-->")
 
     usuario[id_U] = {
-        "nombre":nombre,
-        "apellido":apellidos,
+        "id":id_U,
+        "nombre": nombre,
+        "apellido": apellidos,
         "telefono": telefono,
         "direccion": direccion,
         "tipo": tipo
     }
-    print("¡Usuario registradio!")
+    print("\n✅ ¡Usuario registrado con éxito!")
+    input("Presione Enter para continuar...")
     return usuario
 
 def mostrar_usuarios(usuarios):
+    print("\n" + "═"*90)
+    print(" 👥 LISTADO DE USUARIOS ".center(90))
+    print("═"*90)
+    
     if not usuarios:
-        print("No hay Usuarios")
+        print("📭 No hay Usuarios registrados.".center(90))
+        print("═"*90)
         return usuarios
-    print(f"{'ID Usuario':<10}{'Nombre Completo':<30}{'Telefono':<20}{'Direccion':<10}{'Tipo':<10}")
-    print("="*90)
 
-    for id , info in usuarios.items():
-        print(f"{id:<10}{info['nombre']+" "+info['apellido']:<30}{info['telefono']:<20}{info['direccion']:<10}{info['tipo']:<10}")
-    input("Presione cualquier tecla para continuar -->")
+
+    print(f"{'ID Usuario':<12}{'Nombre Completo':<30}{'Teléfono':<15}{'Dirección':<20}{'Tipo':<10}")
+    print("─"*90)
+
+    for id, info in usuarios.items():
+        nombre_completo = f"{info['nombre']} {info['apellido']}"
+        print(f"{id:<12}{nombre_completo:<30}{info['telefono']:<15}{info['direccion']:<20}{info['tipo']:<10}")
+    
+    print("═"*90)
+    input("\nPresione Enter para continuar -->")
 
 def buscar_usuario(Usuarios):
     while True:
-        print("***¿QUE USUARIO BUSCAS?***")
-        usuarios_bus=input("Ingrese el Nombre o Tipo de Usuario: ").strip().capitalize()
-        encontrado= False
-        for id , info in Usuarios.items():
+        print("\n" + "🔍" + "─"*38)
+        print(" ¿QUÉ USUARIO BUSCAS? ".center(40))
+        print("─"*40)
+        
+        usuarios_bus = input("➤ Ingrese Nombre o Tipo de Usuario: ").strip().capitalize()
+        encontrado = False
+        
+        print("\nResultados:")
+        print("─"*40)
+        for id, info in Usuarios.items():
             if usuarios_bus in info['nombre']:
-                print(f"Encontrado {info['nombre']} ID --> {id}")
-                encontrado=True
+                print(f"✔️ Encontrado: {info['nombre']} {info['apellido']} | ID: {id}")
+                encontrado = True
             elif usuarios_bus in info['tipo']:
-                print(f"Encontrado {info['tipo']}  Nombre: {info['nombre']} ID --> {id}")
-                encontrado=True
+                print(f"✔️ Tipo: {info['tipo']} | Nombre: {info['nombre']} | ID: {id}")
+                encontrado = True
+        
         if not encontrado:
-            print("No hay concidencias encontradas. Intente de nuevo...")
-            input("Presione cualquier tecla para continuar -->")
-        continuar = input("Deseas seguir buscando (Si/No)").strip().capitalize()
+            print("❌ No hay coincidencias encontradas.")
+        
+        print("─"*40)
+        continuar = input("\n¿Deseas seguir buscando? (Si/No): ").strip().capitalize()
         if continuar != "Si":
             break
 
 def actualizar_usuario(Usuarios):
-    id_U = input("ID del Usuario: ").strip().upper()
+    print("\n" + "🔄" + "─"*38)
+    print(" ACTUALIZAR USUARIO ".center(40))
+    print("─"*40)
+    
+    id_U = input("➤ ID del Usuario a actualizar: ").strip().upper()
     if id_U not in Usuarios:
-        print("\nEste Usuario no existe :(\n")
-        input("Presione cualquier tecla para continuar -->")
+        print("\n❌ Este Usuario no existe :(")
+        input("Presione Enter para continuar -->")
         return Usuarios
-    nombre= input("Nombre del Usuario: ").strip().capitalize()
-    apellidos= input("Apellidos del Usuario: ").strip().capitalize()
-    while True:
-        telefono= input("Número de telefono del Usuario: ").strip()
-        if  telefono.isdigit() and len(telefono) == 10:
-            break
-        print ("El número debe ser de 10 Números.")
-        input("Presione cualquier tecla para volver intentar ->")
         
-    direccion= input("Direccion del usuario: ").strip().capitalize() 
+    nombre = input("➤ Nuevo Nombre: ").strip().capitalize()
+    apellidos = input("➤ Nuevos Apellidos: ").strip().capitalize()
+    
     while True:
-        tipo= input("Tipo de usuario(Administrador/Residente)").strip().capitalize()
-        if tipo =="Administrador" or tipo== "Residente":
+        telefono = input("➤ Nuevo teléfono (10 dígitos): ").strip()
+        if telefono.isdigit() and len(telefono) == 10:
             break
-        print("ERROR: Tipo no válido. Por favor ingrese (Administrador/Residente)")
+        print("❌ ERROR: Debe tener 10 números.")
+        input("Reintentar ->")
+        
+    direccion = input("➤ Nueva Dirección: ").strip().capitalize() 
+    
+    while True:
+        tipo = input("➤ Nuevo Tipo (Administrador/Residente): ").strip().capitalize()
+        if tipo == "Administrador" or tipo == "Residente":
+            break
+        print("❌ ERROR: Tipo no válido.")
         input("-->")
     
     Usuarios[id_U] = {
-        "nombre":nombre,
-        "apellido":apellidos,
+        "id":id_U,
+        "nombre": nombre,
+        "apellido": apellidos,
         "telefono": telefono,
         "direccion": direccion,
         "tipo": tipo
     }
-    print("¡Usuario registradio!")
+    print("\n✅ ¡Usuario actualizado correctamente!")
+    input("Presione Enter para continuar...")
     return Usuarios
 
 def eliminar_usuario(usuarios):
-    id_U= input ("Ingrese el ID del U: ").strip().upper()
+    print("\n" + "🗑️" + "─"*38)
+    print(" ELIMINAR USUARIO ".center(40))
+    print("─"*40)
+    
+    id_U = input("➤ Ingrese el ID del Usuario: ").strip().upper()
     if id_U not in usuarios:
-        print("El Usuario no existe....")
-        input("Presione cualquier tecla para continuar -->")
+        print("\n❌ El Usuario no existe....")
+        input("Presione Enter para continuar -->")
         return usuarios
-    print(f"!Vas a Eliminar¡: {usuarios[id_U]['nombre']}")
-    confirmar = input("¿Estas seguro de ELIMINAR el Usuario? (Si/No)").strip().capitalize()
+        
+    print(f"\n❗ ¡VAS A ELIMINAR A!: {usuarios[id_U]['nombre']}")
+    confirmar = input("¿Estás seguro de ELIMINAR? (Si/No): ").strip().capitalize()
 
     if confirmar == "Si":
         del usuarios[id_U]
-        print("Usuario eliminado :( ")
-        return usuarios
+        print("\n✅ Usuario eliminado satisfactoriamente.")
     else:
-        print("Accion cancelada.Vuelva pronto")
-        input("-->")
-        return usuarios
+        print("\n❌ Acción cancelada.")
+    
+    input("\nPresione Enter para continuar -->")
+    return usuarios
