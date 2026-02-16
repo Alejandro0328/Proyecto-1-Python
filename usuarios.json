@@ -1,0 +1,10 @@
+{
+    "C3": {
+        "id": "C3",
+        "nombre": "Carlos",
+        "apellido": "Elprofe",
+        "telefono": "3114805546",
+        "direccion": "Campus",
+        "tipo": "Administrador"
+    }
+}
