@@ -6,11 +6,9 @@ def registrar_evento(mensaje):
     linea = f" EVENTO: {mensaje}\n"
     
     try:
-        # 'a' abre el archivo para añadir texto al final sin borrar lo anterior
         with open("logs.txt", "a", encoding="utf-8") as archivo:
             archivo.write(linea)
     except:
-        # Si hay error con el archivo, el programa sigue para no detenerse
         pass
 
 def ver_logs():

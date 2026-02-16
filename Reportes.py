@@ -10,7 +10,7 @@ def usuarios_mas_activos(prestamos):
         u = p['usuario']
         conteo[u] = conteo.get(u, 0) + 1
     
-    # Ordenar de mayor a menor (lógica simple)
+    # Ordenar de mayor a menor
     for nombre in sorted(conteo, key=conteo.get, reverse=True):
         print(f"👤 {nombre:<20} | Préstamos: {conteo[nombre]}")
         
@@ -20,7 +20,7 @@ def prestamos_vencidos(prestamos):
     print(" REPORTE: PRÉSTAMOS VENCIDOS ".center(40))
     print("─"*40)
     
-    # Paso 1: Pedir la fecha actual para comparar
+    # Pedir la fecha actual para comparar
     hoy_str = input("➤ Ingrese la fecha de hoy (DD-MM-AAAA): ").strip()
     
     if not Prestamos.validar_fecha(hoy_str):

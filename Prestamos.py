@@ -31,7 +31,6 @@ def validar_fecha(fecha_str):
 def fecha_a_numero(fecha_str):
     """Convierte DD-MM-AAAA en un entero AAAAMMDD para comparar."""
     partes = fecha_str.split('-')
-    # partes[2] es año, partes[1] es mes, partes[0] es día
     # Ejemplo: '15-02-2024' -> '2024' + '02' + '15' -> 20240215
     return int(partes[2] + partes[1] + partes[0])
 
@@ -148,7 +147,7 @@ def gestionar_solicitudes(prestamos, herramientas):
                 prestamos[id_S]['estado'] = "Rechazado"
                 prestamos[id_S]['observaciones'] = razon
                 print(f"\n❌ Solicitud {id_S} rechazada correctamente.")
-                break # Sale del bucle de la pregunta
+                break
                 
             elif accion == "ACTIVAR":
                 # Verificamos si hay stock suficiente para la cantidad pedida
@@ -158,11 +157,11 @@ def gestionar_solicitudes(prestamos, herramientas):
                     
                     print(f"\n✅ Préstamo {id_S} activado correctamente.")
                     print(f"📦 Stock actualizado de {herramientas[id_H]['nombre']}: {herramientas[id_H]['stock']}")
-                    break # Sale del bucle de la pregunta
+                    break 
                 else:
                     print(f"\n❌ Error: No hay stock suficiente (Disponibles: {herramientas[id_H]['stock']}).")
                     print("Debe RECHAZAR la solicitud o esperar a que devuelvan herramientas.")
-                    break # Sale del bucle para que el admin decida qué hacer
+                    break 
             else:
                 print("\n❌ Opción no válida. Escriba ACTIVAR o RECHAZAR.")
     else:
@@ -230,15 +229,14 @@ def ver_mis_prestamos(prestamos, usuario_sesion):
     id_actual = usuario_sesion.get('id')
     encontrado = False
 
-    # Encabezado de la tablita
+
     print(f"{'ID':<8} {'Herramienta':<18} {'Cant.':<7} {'Estado':<12} {'Observaciones':<30}")
     print("─" * 100)
 
     for id_p, info in prestamos.items():
-        # Filtramos por el ID del usuario que tiene la sesión iniciada
+
         if info.get('id_usuario') == id_actual:
             encontrado = True
-            # Usamos .get() por seguridad para evitar errores si falta alguna clave
             herramienta = info.get('herramienta')
             cantidad = info.get('cantidad')
             estado = info.get('estado')

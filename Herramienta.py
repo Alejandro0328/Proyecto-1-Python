@@ -70,7 +70,6 @@ def agregar_herramientas(herramientas):
     nombre = input("➤ Nombre de la Herramienta: ").strip().capitalize()
     categoria = input("➤ Categoria de la Herramienta: ").strip().capitalize()
     
-    # Mantenemos tus validaciones de stock y estado tal cual
     stock = int(input("➤ Cantidad de la Herramienta: "))
     
     while True:
@@ -103,7 +102,6 @@ def mostrar_herramientas_todas(herramientas):
         input("\nPresione Enter para continuar...")
         return herramientas
 
-    # Encabezado con tus anchos originales pero más limpio
     print(f"{'ID':<10}{'Nombre':<30}{'Categoria':<20}{'Stock':<10}{'Estado':<10}")
     print("─"*90)
 
