@@ -1,7 +1,6 @@
 def registrar_evento(mensaje):
     """
     Guarda un evento en el archivo logs.txt. 
-    Al no usar datetime, registraremos el evento directamente.
     """
     # Creamos la línea del evento
     linea = f" EVENTO: {mensaje}\n"

@@ -37,7 +37,7 @@ def fecha_a_numero(fecha_str):
 
 
 
-def solicitar_prestamo(usuario_actual, herramientas, prestamos):
+def solicitar_prestamo(usuario_actual, herramientas, prestamos,dic_fun):
     print("\n" + "═"*50)
     print(" 📑 CREAR NUEVA SOLICITUD DE PRÉSTAMO ".center(50))
     print("═"*50)
@@ -50,6 +50,11 @@ def solicitar_prestamo(usuario_actual, herramientas, prestamos):
         if id_H == 'EXIT': return prestamos, herramientas
         if id_H not in herramientas:
             print("❌ No existe."); continue
+        if herramientas[id_H]['estado'] != "Activo":
+            print(f"❌ No disponible. Estado: {herramientas[id_H]['estado']}")
+            dic_fun['registrar_log'](f"FALLO: {usuario_actual['nombre']} pidió {id_H} (No Activa)")
+            continue
+        
         if herramientas[id_H]['stock'] <= 0:
             print("❌ Sin stock."); continue
         break
@@ -82,7 +87,7 @@ def solicitar_prestamo(usuario_actual, herramientas, prestamos):
         f_entrega = input("➤ Fecha estimada entrega (DD-MM-AAAA): ").strip()
         if validar_fecha(f_entrega):
             # Validación extra: que la entrega no sea antes que el inicio (comparación simple de strings)
-            if f_entrega > f_inicio: break
+            if fecha_a_numero(f_entrega) >= fecha_a_numero(f_inicio):break
             print("❌ La fecha de entrega no puede ser anterior al inicio.")
         else:
             print("❌ Fecha inválida.")
@@ -103,64 +108,67 @@ def solicitar_prestamo(usuario_actual, herramientas, prestamos):
         "observaciones": obs
     }
     
-    import Logs
-    Logs.registrar_evento(f"SOLICITUD: {id_P} creada por {usuario_actual['nombre']}")
+    
+    dic_fun['registrar_log'](f"SOLICITUD: {id_P} creada por {usuario_actual['nombre']}")
     print("\n✅ Solicitud registrada en espera de aprobación.")
     return prestamos, herramientas
 def gestionar_solicitudes(prestamos, herramientas):
-    print("\n" + "═"*65)
-    print(" ⚖️  APROBACIÓN DE SOLICITUDES (ADMIN) ".center(65))
-    print("═"*65)
+    print("\n" + "═"*100)
+    print(" ⚖️  APROBACIÓN DE SOLICITUDES (ADMIN) ".center(100))
+    print("═"*100)
     
-
-    pendientes = [id for id, p in prestamos.items() if p['estado'] == "En trámite"]
+    # Filtramos solicitudes pendientes
+    pendientes = [id_p for id_p, p in prestamos.items() if p['estado'] == "En trámite"]
     
     if not pendientes:
-        print("📭 No hay solicitudes pendientes de aprobación.".center(65))
-        print("═"*65)
+        print("📭 No hay solicitudes pendientes de aprobación.".center(100))
+        print("═"*100)
         input("\nPresione Enter para volver...")
         return prestamos, herramientas
 
-    print(f"{'ID Préstamo':<15}{'Usuario':<20}{'Herramienta':<20}")
-    print("─"*65)
+    print(f"{'ID Préstamo':<15}{'Stock':<15}{'Usuario':<35}{'Herramienta':<20}{'Fecha de Inicio':<20}")
+    print("─"*100)
     for id_p in pendientes:
-        print(f"{id_p:<15}{prestamos[id_p]['usuario']:<20}{prestamos[id_p]['herramienta']:<20}")
+        print(f"{id_p:<15}{prestamos[id_p]['cantidad']:<15}{prestamos[id_p]['usuario']:<35}{prestamos[id_p]['herramienta']:<20}{prestamos[id_p]['fecha_inicio']:<20}")
     
-    print("─"*65)
-    id_S = input("\n➤ ID del préstamo a ACTIVAR (o EXIT para salir): ").strip().upper()
+    print("─"*100)
+    id_S = input("\n➤ ID del préstamo a gestionar (o EXIT para salir): ").strip().upper()
 
     if id_S == 'EXIT': return prestamos, herramientas
 
     if id_S in pendientes:
         id_H = prestamos[id_S]['id_herramienta']
+        cant_solicitada = prestamos[id_S]['cantidad']
         
         while True:
-            accion=input(" Desea ACTIVAR o RECHAZAR el prestamo ? ").strip().upper()
+            accion = input("¿Desea ACTIVAR o RECHAZAR el préstamo? ").strip().upper()
+            
             if accion == "RECHAZAR":
                 razon = input(" ➤ Ingrese el motivo del rechazo (observación): ").strip()
                 prestamos[id_S]['estado'] = "Rechazado"
                 prestamos[id_S]['observaciones'] = razon
                 print(f"\n❌ Solicitud {id_S} rechazada correctamente.")
-                break
+                break # Sale del bucle de la pregunta
+                
             elif accion == "ACTIVAR":
-                if herramientas[id_H]['stock'] > 0:
+                # Verificamos si hay stock suficiente para la cantidad pedida
+                if herramientas[id_H]['stock'] >= cant_solicitada:
                     prestamos[id_S]['estado'] = "Activo"
-                    while True:
-                        if prestamos[id_S]['cantidad'] <= herramientas[id_H]['stock']:
-                            herramientas[id_H]['stock'] -= prestamos[id_S]['cantidad']
-                            break
-                        print(f"❌ Cantidad no disponible | Disponibles: {herramientas[id_H]['stock']}).")
+                    herramientas[id_H]['stock'] -= cant_solicitada
+                    
                     print(f"\n✅ Préstamo {id_S} activado correctamente.")
                     print(f"📦 Stock actualizado de {herramientas[id_H]['nombre']}: {herramientas[id_H]['stock']}")
-                    return prestamos, herramientas
+                    break # Sale del bucle de la pregunta
                 else:
-                    print("\n❌ Error: Ya no hay stock disponible para esta herramienta.")
-                    break
-            print("\n❌ Opcion no valida.(ACTIVAR/RECHAZAR).")
-
+                    print(f"\n❌ Error: No hay stock suficiente (Disponibles: {herramientas[id_H]['stock']}).")
+                    print("Debe RECHAZAR la solicitud o esperar a que devuelvan herramientas.")
+                    break # Sale del bucle para que el admin decida qué hacer
+            else:
+                print("\n❌ Opción no válida. Escriba ACTIVAR o RECHAZAR.")
     else:
-        print("\n❌ ID no válido o no está en trámite.")
+        print("\n❌ ID no válido o la solicitud no está 'En trámite'.")
     
+    input("\nPresione Enter para continuar...")
     return prestamos, herramientas
 
 def mostrar_prestamos_todos(prestamos):
@@ -212,4 +220,35 @@ def registrar_devolucion(prestamos, herramientas):
         print("\n❌ Acción cancelada.")
     
     return prestamos, herramientas
+
+def ver_mis_prestamos(prestamos, usuario_sesion):
+    print("\n" + "═" * 100)
+    print(f" 📂 ESTADO DE MIS PRÉSTAMOS ".center(60))
+    print(f" Usuario: {usuario_sesion['nombre']} {usuario_sesion['apellido']} ".center(100))
+    print("═" * 100)
+    
+    id_actual = usuario_sesion.get('id')
+    encontrado = False
+
+    # Encabezado de la tablita
+    print(f"{'ID':<8} {'Herramienta':<18} {'Cant.':<7} {'Estado':<12} {'Observaciones':<30}")
+    print("─" * 100)
+
+    for id_p, info in prestamos.items():
+        # Filtramos por el ID del usuario que tiene la sesión iniciada
+        if info.get('id_usuario') == id_actual:
+            encontrado = True
+            # Usamos .get() por seguridad para evitar errores si falta alguna clave
+            herramienta = info.get('herramienta')
+            cantidad = info.get('cantidad')
+            estado = info.get('estado')
+            observacion = info.get('observaciones')
+            
+            print(f"{id_p:<8} {herramienta[:17]:<18} {cantidad:<7} {estado:<12} {observacion:<30}")
+
+    if not encontrado:
+        print("     No tienes solicitudes o préstamos registrados.".center(60))
+    
+    print("─" * 100)
+    input("\nPresione Enter para volver al menú...")
  

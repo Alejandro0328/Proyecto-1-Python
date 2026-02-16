@@ -27,6 +27,7 @@ def iniciar():
         'consultar_p': Herramienta.consultar_poseedor,       
         'resumen_b': Herramienta.mostrar_resumen_vecindario,
         # Prestamos
+        'mis_prestamos':Prestamos.ver_mis_prestamos,
         'solicitar_p': Prestamos.solicitar_prestamo,    
         'gestionar_s': Prestamos.gestionar_solicitudes,  
         'mostrar_p': Prestamos.mostrar_prestamos_todos,   

@@ -91,32 +91,31 @@ def menu_ges_prestamos(prestamos, herramientas, usuario_actual, dic_fun):
         print(f" Rol actual: {rol}")
         print("─" * 50)
         print("  1. 📑 Crear Solicitud de Préstamo")
-        
-        # Estas opciones SOLO aparecen si eres Administrador
+        print("  2. 📊 Mis Pretamos")
         if rol == 'Administrador':
-            print("  2. ✅ Aprobar/Rechazar Solicitudes")
-            print("  3. 📥 Registrar Devolución")
-            print("  4. 📊 Ver Historial Completo")
+            print("  3. ✅ Aprobar/Rechazar Solicitudes")
+            print("  4. 📥 Registrar Devolución")
+            print("  5. 📊 Ver Historial Completo")
         
-        print("  5. 🔙 Volver/Guardar")
+        print("  0. 🔙 Volver/Guardar")
         print("═" * 50)
         
         opc = input("\n ➤ Opción: ")
         
         if opc == "1":
-            # Pasamos el usuario_actual para que el préstamo quede a su nombre automáticamente
-            prestamos, herramientas = dic_fun['solicitar_p'](usuario_actual, herramientas, prestamos)
-        
-        elif opc == "2" and rol == 'Administrador':
+            prestamos, herramientas = dic_fun['solicitar_p'](usuario_actual, herramientas, prestamos,dic_fun)
+        elif opc == "2":
+            dic_fun['mis_prestamos'](prestamos,usuario_actual)       
+        elif opc == "3" and rol == 'Administrador':
             prestamos, herramientas = dic_fun['gestionar_s'](prestamos, herramientas)
             
-        elif opc == "3" and rol == 'Administrador':
+        elif opc == "4" and rol == 'Administrador':
             prestamos, herramientas = dic_fun['reg_devolucion'](prestamos, herramientas)
             
-        elif opc == "4" and rol == 'Administrador':
+        elif opc == "5" and rol == 'Administrador':
             dic_fun['mostrar_p'](prestamos)
             
-        elif opc == "5":
+        elif opc == "0":
             print("\n💾 Guardando cambios en el sistema...")
             dic_fun['guardar'](prestamos, "prestamos.json")
             dic_fun['guardar'](herramientas, "herramientas.json")
@@ -129,9 +128,9 @@ def menu_reportes(herramientas, prestamos, dic_fun):
         imprimir_encabezado("📊 REPORTES Y LOGS")
         print("  1. ⚠️  Stock Bajo")
         print("  2. 📋 Préstamos por Estado")
-        print("  3. ⏰ Préstamos VENCIDOS")        # Nuevo
+        print("  3. ⏰ Préstamos VENCIDOS")       
         print("  4. 🔥 Herramientas Populares")
-        print("  5. 👥 Usuarios más Activos")       # Nuevo
+        print("  5. 👥 Usuarios más Activos")       
         print("  6. 📜 Historial de un Usuario")
         print("  7. 📜 Ver Logs del Sistema")
         print("  8. 🔙 Volver / Guardar")
@@ -144,12 +143,10 @@ def menu_reportes(herramientas, prestamos, dic_fun):
         elif opc == "2": 
             dic_fun['rep_estado'](prestamos)
         elif opc == "3": 
-            # Llamada directa al nuevo reporte de vencidos
             dic_fun['rep_vencidos'](prestamos)
         elif opc == "4": 
             dic_fun['rep_popular'](prestamos)
         elif opc == "5":
-            # Llamada al nuevo reporte de usuarios
             dic_fun['rep_usuarios'](prestamos)
         elif opc == "6": 
             dic_fun['rep_historial'](prestamos)
@@ -178,8 +175,6 @@ def menu_principal(usuarios, herramientas, prestamos, dic_fun):
         print("  1. 🔍 Buscar Herramienta")
         print("  2. 📦 Mostrar Inventario")
         print("  3. 📑 Módulo de Préstamos")
-        
-        # Estas funciones deben estar en tu diccionario de acciones en main.py
         print("  4. 👥 Consultar Poseedor (¿Quién la tiene?)")
         print("  5. 📊 Resumen Total del Barrio")
 
@@ -197,10 +192,9 @@ def menu_principal(usuarios, herramientas, prestamos, dic_fun):
         if opcion == "1": dic_fun['buscar_h'](herramientas)
         elif opcion == "2": dic_fun['mostrar_h'](herramientas)
         elif opcion == "3": 
-            # Aquí llamas a la función interna de este mismo archivo
             prestamos, herramientas = menu_ges_prestamos(prestamos, herramientas, usuario_sesion, dic_fun)
         
-        # USANDO EL DICCIONARIO PARA LAS NUEVAS FUNCIONES
+        
         elif opcion == "4": dic_fun['consultar_p'](herramientas, prestamos)
         elif opcion == "5": dic_fun['resumen_b'](herramientas, prestamos)
         
@@ -208,7 +202,10 @@ def menu_principal(usuarios, herramientas, prestamos, dic_fun):
             dic_fun['guardar'](usuarios, "usuarios.json")
             dic_fun['guardar'](herramientas, "herramientas.json")
             dic_fun['guardar'](prestamos, "prestamos.json")
-            break
+            usuario_sesion = filtro(usuarios, dic_fun)
+            if not usuario_sesion: return 
+
+            rol = usuario_sesion['tipo']
             
         elif rol == 'Administrador':
             if opcion == "6": herramientas = menu_ges_herramientas(herramientas, dic_fun)
