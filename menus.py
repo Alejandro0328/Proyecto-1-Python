@@ -26,11 +26,35 @@ def filtro(usuarios,dic_fun):
             # Si el ID existe, permite la entrada
             return usuarios[id_U]
         else:
-            dic_fun['registrar_log'] (f"ACCESO FALLIDO: ID incorrecto {id_U}")
+            dic_fun['registrar_error'] (f"ACCESO FALLIDO: ID incorrecto {id_U}")
             print("\n ❌ ID NO RECONOCIDO. Por favor, verifique sus datos.")
             input(" Presione Enter para intentar de nuevo...")
 
 # --- SUBMENÚS ---
+
+# --- menus.py ---
+
+def menu_auditoria(dic_fun):
+    """Submenú para que el Administrador consulte los archivos de texto."""
+    while True:
+        limpiar_pantalla()
+        imprimir_encabezado("🔍 CENTRO DE AUDITORÍA Y REGISTROS")
+        print(" 1. Ver Historial de Eventos (Éxitos/Actividad)")
+        print(" 2. Ver Historial de Errores (Fallos/Validaciones)")
+        print(" 0. Volver al Menú Principal")
+        print("─" * 50)
+        
+        op = input("\n ➤ Seleccione una opción: ")
+        
+        if op == "1":
+            dic_fun['ver_eventos']() 
+        elif op == "2":
+            dic_fun['ver_errores']() 
+        elif op == "0":
+            break
+        else:
+            print("⚠️ Opción no válida.")
+            input("Presione Enter...")
 
 def menu_ges_herramientas(herramientas, dic_fun):
     while True:
@@ -45,10 +69,10 @@ def menu_ges_herramientas(herramientas, dic_fun):
         
         opc = input("\n ➤ Opción: ")
         
-        if opc == "1": herramientas = dic_fun['agregar_h'](herramientas)
-        elif opc == "2": herramientas = dic_fun['actualizar_h'](herramientas)
-        elif opc == "3": herramientas = dic_fun['inavilitar_h'](herramientas)
-        elif opc == "4": herramientas = dic_fun['eliminar_h'](herramientas)
+        if opc == "1": herramientas = dic_fun['agregar_h'](herramientas,dic_fun)
+        elif opc == "2": herramientas = dic_fun['actualizar_h'](herramientas,dic_fun)
+        elif opc == "3": herramientas = dic_fun['inavilitar_h'](herramientas,dic_fun)
+        elif opc == "4": herramientas = dic_fun['eliminar_h'](herramientas,dic_fun)
         elif opc == "5":
             dic_fun['guardar'](herramientas, "herramientas.json")
             return herramientas
@@ -70,11 +94,11 @@ def menu_ges_usuarios(usuarios, dic_fun):
 
         opc = input("\n ➤ Opción: ")
         
-        if opc == "1": usuarios = dic_fun['agregar_u'](usuarios)
+        if opc == "1": usuarios = dic_fun['agregar_u'](usuarios,dic_fun)
         elif opc == "2": dic_fun['mostrar_u'](usuarios)
         elif opc == "3": dic_fun['buscar_u'](usuarios)
-        elif opc == "4": usuarios = dic_fun['actualizar_u'](usuarios)
-        elif opc == "5": usuarios = dic_fun['eliminar_u'](usuarios)
+        elif opc == "4": usuarios = dic_fun['actualizar_u'](usuarios,dic_fun)
+        elif opc == "5": usuarios = dic_fun['eliminar_u'](usuarios,dic_fun)
         elif opc == "6":
             dic_fun['guardar'](usuarios, "usuarios.json")
             return usuarios
@@ -181,7 +205,8 @@ def menu_principal(usuarios, herramientas, prestamos, dic_fun):
         if rol == 'Administrador':
             print("  6. ⚙️  Gestión de Herramientas")
             print("  7. 👥 Gestión de Usuarios")
-            print("  8. 📈 Reportes y Logs") 
+            print("  8. 📈 Reportes ")
+            print("  9. 📈 Eventos y Errores ") 
         
         print("─" * 50)
         print("  0. 🚪 Salir y Guardar")
@@ -211,3 +236,4 @@ def menu_principal(usuarios, herramientas, prestamos, dic_fun):
             if opcion == "6": herramientas = menu_ges_herramientas(herramientas, dic_fun)
             elif opcion == "7": usuarios = menu_ges_usuarios(usuarios, dic_fun)
             elif opcion == "8": menu_reportes(herramientas, prestamos, dic_fun)
+            elif opcion == "9": menu_auditoria(dic_fun)

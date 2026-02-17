@@ -56,7 +56,7 @@ def consultar_poseedor(herramientas, prestamos):
         print("\n❌ ID de herramienta no reconocido.")
     
     input("\nPresione Enter para continuar...")
-def agregar_herramientas(herramientas):
+def agregar_herramientas(herramientas,dic_fun):
     print("\n" + "═"*40)
     print(" ✨ REGISTRAR NUEVA HERRAMIENTA ".center(40))
     print("═"*40)
@@ -64,23 +64,43 @@ def agregar_herramientas(herramientas):
     id_h = input("➤ Ingrese el ID de la herramienta: ").strip().upper()
     if id_h in herramientas:
         print("\n❌ La Herramienta ya existe.....")
+        dic_fun['registrar_error'] (f"REGISTRO FALLIDO: ID ya Existente {id_h}")
         input("Presione Enter para continuar -->")
         return herramientas
         
     nombre = input("➤ Nombre de la Herramienta: ").strip().capitalize()
     categoria = input("➤ Categoria de la Herramienta: ").strip().capitalize()
-    
-    stock = int(input("➤ Cantidad de la Herramienta: "))
-    
+    while True:
+        cantidad = input("➤ Cantidad de la Herramienta (Stock): ").strip()
+        if cantidad.isdigit(): # Verifica que sean solo números
+            stock = int(cantidad)
+            break
+        dic_fun['registrar_error'] (f" AGREGAR_H: Valor no Valido ({cantidad})")
+        print("❌ ERROR: Ingrese un número entero válido.")
+        input("-->")
     while True:
         estado = input("➤ Estado (Activo/Inactivo/Taller): ").strip().capitalize()
         if estado == "Activo" or estado == "Inactivo" or estado == "Taller":
             break
         print("❌ ERROR: Estado no valido. Ingrese (Activo/Inactivo/Taller)")
+        dic_fun['registrar_error'] (f" AGREGAR_H: Valor no Valido ({estado})")
         input("-->")
         
-    valor = float(input("➤ Valor estimado de la Herramienta: "))
-    
+    while True:
+        valor_in = input("➤ Valor estimado de la Herramienta: ").strip()
+        try:
+            valor = float(valor_in)
+            if valor >= 0:
+                break
+            else:
+                print("❌ ERROR: El valor no puede ser negativo.")
+                dic_fun['registrar_error'] (f" AGREGAR_H: Número negativo ({valor})")
+        except ValueError:
+            print("❌ ERROR: Ingrese un valor numérico (ej: 1500.50).")
+            dic_fun['registrar_error'] (f" AGREGAR_H: Valor no Valido ({valor})")
+        input("-->")
+        
+
     herramientas[id_h] = {
         "nombre": nombre,
         "categoria": categoria,
@@ -138,7 +158,7 @@ def buscar_herramienta(herramientas):
         if continuar != "Si":
             break
 
-def actualizar_herramienta(herramientas):
+def actualizar_herramienta(herramientas,dic_fun):
     print("\n" + "🔄" + "─"*38)
     print(" ACTUALIZAR HERRAMIENTA ".center(40))
     print("─"*40)
@@ -146,6 +166,7 @@ def actualizar_herramienta(herramientas):
     id_h = input("➤ ID de la Herramienta: ").strip().upper()
     if id_h not in herramientas:
         print("\n❌ Esta Herramienta no existe :(")
+        dic_fun['registrar_error'] (f" ACTUALIZAR_H: ID de herramienta no reconocido ({id_h})")
         input("Presione Enter para continuar -->")
         return herramientas
         
@@ -166,7 +187,7 @@ def actualizar_herramienta(herramientas):
     input("\nPresione Enter para continuar...")
     return herramientas
 
-def inavilitar_herramienta(herramientas):
+def inavilitar_herramienta(herramientas,dic_fun):
     print("\n" + "⚠️" + "─"*38)
     print(" INHABILITAR HERRAMIENTA ".center(40))
     print("─"*40)
@@ -174,6 +195,7 @@ def inavilitar_herramienta(herramientas):
     id_h = input("➤ Ingrese el ID de la Herramienta: ").strip().upper()
     if id_h not in herramientas:
         print("\n❌ La Herramienta no existe....")
+        dic_fun['registrar_error'] (f" ACTUALIZAR_H: ID de herramienta no reconocido ({id_h})")
         input("Presione Enter para continuar -->")
         return herramientas
         
@@ -184,13 +206,15 @@ def inavilitar_herramienta(herramientas):
         herramientas[id_h]['estado'] = "Fuera de servicio"
         herramientas[id_h]['stock'] = 0
         print("\n🚫 Se inhabilitó la herramienta con éxito.")
+        dic_fun['registrar_log'] (f"ACCION CONFIRMADA: Se Inabilito |{id_h}|")
     else:
         print("\n❌ Acción cancelada.")
+        dic_fun['registrar_log'] (f"ACCION CANCELADA: Se rechazo la inabilitación |{id_h}|")
     
     input("\nPresione Enter para continuar -->")
     return herramientas
 
-def eliminar_herramienta(herramientas):
+def eliminar_herramienta(herramientas,dic_fun):
     print("\n" + "🗑️" + "─"*38)
     print(" ELIMINAR HERRAMIENTA ".center(40))
     print("─"*40)
@@ -198,6 +222,7 @@ def eliminar_herramienta(herramientas):
     id_h = input("➤ Ingrese el ID de la Herramienta: ").strip().upper()
     if id_h not in herramientas:
         print("\n❌ La Herramienta no existe....")
+        dic_fun['registrar_error'] (f" ELIMINAR_H: ID de herramienta no reconocido ({id_h})")
         input("Presione Enter para continuar -->")
         return herramientas
         
@@ -207,8 +232,10 @@ def eliminar_herramienta(herramientas):
     if confirmar == "Si":
         del herramientas[id_h]
         print("\n✅ Registro eliminado satisfactoriamente.")
+        dic_fun['registrar_log'] (f"ACCION CONFIRMADA: Se Elimino |{id_h}|")
     else:
         print("\n❌ Acción cancelada.")
+        dic_fun['registrar_log'] (f"ACCION CANCELADA: Se rechazo la Eliminación |{id_h}|")
     
     input("\nPresione Enter para continuar -->")
     return herramientas

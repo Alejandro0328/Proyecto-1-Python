@@ -9,7 +9,7 @@ def iniciar():
     U=Archivos.cargar_datos("usuarios.json")
     H=Archivos.cargar_datos("herramientas.json")
     P=Archivos.cargar_datos("prestamos.json")
-    acciones = {
+    Funciones= {
         # Herramientas
         'agregar_h':Herramienta.agregar_herramientas,
         'mostrar_h': Herramienta.mostrar_herramientas_todas,
@@ -40,11 +40,14 @@ def iniciar():
         'rep_vencidos': Reportes.prestamos_vencidos,      
         'rep_usuarios': Reportes.usuarios_mas_activos,
         # LOgs
-        'ver_logs': Logs.ver_logs,
+        'ver_eventos': Logs.ver_eventos,
+        'ver_errores': Logs.ver_errores,
         'registrar_log': Logs.registrar_evento,
+        'registrar_error': Logs.registrar_error,
         # Guardado
         'guardar': Archivos.guardar_datos
     }
-    menus.menu_principal(U,H,P,acciones)
+    menus.menu_principal(U,H,P,Funciones)
 
 iniciar()
+

@@ -1,4 +1,4 @@
-def agregar_Usuario(usuario):
+def agregar_Usuario(usuario,dic_fun):
     print("\n" + "═"*40)
     print(" 👤 REGISTRAR NUEVO USUARIO ".center(40))
     print("═"*40)
@@ -6,6 +6,7 @@ def agregar_Usuario(usuario):
     id_U = input("➤ Ingrese el ID Usuario: ").strip().upper()
     if id_U in usuario:
         print("\n❌ El Usuario ya existe.....")
+        dic_fun['registrar_error'] (f"REGISTRO FALLIDO: ID ya Existente {id_U}")
         input("Presione Enter para continuar -->")
         return usuario
         
@@ -17,6 +18,8 @@ def agregar_Usuario(usuario):
         if telefono.isdigit() and len(telefono) == 10:
             break
         print("❌ ERROR: El número debe ser de 10 dígitos numéricos.")
+        dic_fun['registrar_error'] (f" AGREGAR_U: Valor no Valido ({telefono})")
+
         input("Presione Enter para volver intentar ->")
         
     direccion = input("➤ Dirección del usuario: ").strip().capitalize() 
@@ -26,6 +29,7 @@ def agregar_Usuario(usuario):
         if tipo == "Administrador" or tipo == "Residente":
             break
         print("❌ ERROR: Tipo no válido. Ingrese (Administrador/Residente)")
+        dic_fun['registrar_error'] (f" AGREGAR_U: Categoria no Valida ({tipo})")
         input("-->")
 
     usuario[id_U] = {
@@ -88,7 +92,7 @@ def buscar_usuario(Usuarios):
         if continuar != "Si":
             break
 
-def actualizar_usuario(Usuarios):
+def actualizar_usuario(Usuarios,dic_fun):
     print("\n" + "🔄" + "─"*38)
     print(" ACTUALIZAR USUARIO ".center(40))
     print("─"*40)
@@ -96,6 +100,7 @@ def actualizar_usuario(Usuarios):
     id_U = input("➤ ID del Usuario a actualizar: ").strip().upper()
     if id_U not in Usuarios:
         print("\n❌ Este Usuario no existe :(")
+        dic_fun['registrar_error'] (f"BUSQUEDA FALLIDA: ID No Existente {id_U}")
         input("Presione Enter para continuar -->")
         return Usuarios
         
@@ -107,6 +112,7 @@ def actualizar_usuario(Usuarios):
         if telefono.isdigit() and len(telefono) == 10:
             break
         print("❌ ERROR: Debe tener 10 números.")
+        dic_fun['registrar_error'] (f" AGREGAR_U: Valor no Valido ({telefono})")
         input("Reintentar ->")
         
     direccion = input("➤ Nueva Dirección: ").strip().capitalize() 
@@ -116,6 +122,7 @@ def actualizar_usuario(Usuarios):
         if tipo == "Administrador" or tipo == "Residente":
             break
         print("❌ ERROR: Tipo no válido.")
+        dic_fun['registrar_error'] (f" AGREGAR_U: Categoria no Valida ({tipo})")
         input("-->")
     
     Usuarios[id_U] = {
@@ -130,7 +137,7 @@ def actualizar_usuario(Usuarios):
     input("Presione Enter para continuar...")
     return Usuarios
 
-def eliminar_usuario(usuarios):
+def eliminar_usuario(usuarios,dic_fun):
     print("\n" + "🗑️" + "─"*38)
     print(" ELIMINAR USUARIO ".center(40))
     print("─"*40)
@@ -138,6 +145,7 @@ def eliminar_usuario(usuarios):
     id_U = input("➤ Ingrese el ID del Usuario: ").strip().upper()
     if id_U not in usuarios:
         print("\n❌ El Usuario no existe....")
+        dic_fun['registrar_error'] (f"BUSQUEDA FALLIDA: ID No Existente {id_U}")
         input("Presione Enter para continuar -->")
         return usuarios
         

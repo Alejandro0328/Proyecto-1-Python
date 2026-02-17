@@ -51,3 +51,4 @@ El código está organizado de forma modular para facilitar el mantenimiento:
 3. Ejecuta el comando:
    ```bash
    python main.py
+4. Ingresa el ID: C3
