@@ -48,8 +48,15 @@ def prestamos_vencidos(prestamos):
     
     input("\nPresione Enter para continuar...")
 def stock_bajo(herramientas):
+    while True:
+        cantidad = input("➤ Cantidad de Stock (Minima) : ").strip()
+        if cantidad.isdigit(): # Verifica que sean solo números
+            stock = int(cantidad)
+            break
+        print("❌ ERROR: Ingrese un número entero válido.")
+        input("-->")
     print("\n" + "⚠️" + "─"*38)
-    print(" REPORTE: STOCK BAJO (< 3) ".center(40))
+    print(f" REPORTE: STOCK BAJO (< {stock}) ".center(40))
     print("─"*40)
     
     encontrado = False
@@ -57,7 +64,7 @@ def stock_bajo(herramientas):
     print("─"*40)
     
     for id, info in herramientas.items():
-        if info['stock'] < 3:
+        if info['stock'] < stock:
             print(f"{id:<10}{info['nombre']:<20}{info['stock']:<10}")
             encontrado = True
             
