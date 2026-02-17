@@ -1,0 +1,43 @@
+==========================================================
+SISTEMA DE GESTIÓN JAC - REPORTE DE PRUEBAS
+==========================================================
+
+CASO DE PRUEBA 01: Validación de Stock Insuficiente
+--------------------------------------------------
+Descripción: Intentar solicitar una cantidad mayor a la disponible en bodega.
+Entrada: 
+- ID Herramienta: H01 (Taladro)
+- Stock en sistema: 3
+- Cantidad solicitada: 5
+Resultado Esperado: El sistema debe impedir la transacción.
+Resultado Obtenido: Mensaje "Error: Cantidad solicitada excede el stock disponible". 
+Registro: El evento quedó guardado en Errores.txt.
+Estado: EXITOSO ✅
+
+CASO DE PRUEBA 02: Seguridad de Acceso (Login)
+----------------------------------------------
+Descripción: Ingresar al sistema con un ID de vecino que no existe.
+Entrada: ID de usuario "VECINO_99"
+Resultado Esperado: Denegación de acceso y registro de intento fallido.
+Resultado Obtenido: Mensaje "ID NO RECONOCIDO" y el programa solicita reintentar.
+Registro: Evento guardado en Errores.txt como "ACCESO FALLIDO".
+Estado: EXITOSO ✅
+
+CASO DE PRUEBA 03: Ciclo de Préstamo y Devolución
+-------------------------------------------------
+Descripción: Verificar que el stock se descuente al prestar y se restaure al devolver.
+Pasos:
+1. Stock inicial de "Pala": 10
+2. Se aprueba préstamo de 2 unidades.
+3. Stock verificado: 8
+4. Se registra devolución de las 2 unidades.
+Resultado Obtenido: Stock final 10.
+Estado: EXITOSO ✅
+
+CASO DE PRUEBA 04: Reporte de Préstamos Vencidos
+------------------------------------------------
+Descripción: Filtrar préstamos cuya fecha de entrega es anterior a hoy.
+Entrada: Fecha del sistema ingresada "20-02-2026"
+Préstamo en base de datos: Fecha entrega "15-02-2026"
+Resultado Obtenido: El sistema listó correctamente el préstamo como "VENCIDO".
+Estado: EXITOSO ✅
