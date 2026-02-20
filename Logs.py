@@ -18,7 +18,7 @@ def registrar_error(mensaje):
     """
     Guarda un evento en el archivo logs.txt. 
     """
-    # Creamos la línea del evento
+    # Creamos la línea del error
     linea = f" ERROR: {mensaje}\n"
     
     try:

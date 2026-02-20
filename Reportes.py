@@ -111,3 +111,4 @@ def herramientas_populares(prestamos):
     for nombre, total in top[:5]: # Top 5
         print(f"➤ {nombre}: {total} veces")
     input("\nPresione Enter...")
+    

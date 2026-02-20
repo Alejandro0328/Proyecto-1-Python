@@ -6,5 +6,29 @@
         "telefono": "3114805546",
         "direccion": "Campus",
         "tipo": "Administrador"
+    },
+    "01": {
+        "id": "01",
+        "nombre": "Miguel",
+        "apellido": "Acevedo",
+        "telefono": "3114805546",
+        "direccion": "Chocoa",
+        "tipo": "Residente"
+    },
+    "02": {
+        "id": "02",
+        "nombre": "Pablo",
+        "apellido": "Quintanilla",
+        "telefono": "3145129209",
+        "direccion": "Ecuador",
+        "tipo": "Residente"
+    },
+    "03": {
+        "id": "03",
+        "nombre": "Yuly",
+        "apellido": "Acevedo",
+        "telefono": "3114805547",
+        "direccion": "Giron",
+        "tipo": "Residente"
     }
 }

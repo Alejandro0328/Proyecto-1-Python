@@ -1,0 +1,2 @@
+ EVENTO: SOLICITUD: P1 creada por Miguel
+ EVENTO: SOLICITUD: P2 creada por Pablo
